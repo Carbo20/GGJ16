@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// k_GroundedRadius value should be watched too
 /// mb change collision detection to check if grounded
 /// </summary>
-public class CharacterController : MonoBehaviour
+public class Character_Controller : MonoBehaviour
 {
 
     #region Test des différents types de mouvements
@@ -192,11 +192,11 @@ public class CharacterController : MonoBehaviour
 
         if (!m_IsRolling)
         {
-            if ( (x!=0 || y!=0) && m_rollCDLeft <= 0 && (Input.GetButtonDown("Roll1")))
+            if ( (x!=0 || y!=0) && m_rollCDLeft <= 0 && (Input.GetButtonDown("Roll")))
             {
                 m_Roll = true;
                 m_rollCDLeft = m_RollCD;
-                Debug.Log("ROLLATTACK  X= " + x + "  Y= " + y);
+                Debug.Log("ROLLATTACK  X= " + x + "  Y= " + y + "   Joystick: " + Input.GetJoystickNames()[0]);
                 m_IsRolling = true;
                 timeRolling = m_rollDuration;
                 m_XDirection = x;
