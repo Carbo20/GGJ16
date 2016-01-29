@@ -10,7 +10,7 @@ public class ChickenPop : MonoBehaviour {
     List<GameObject>  chickenGoList;
     [SerializeField]
     private float popTime;
-    private int nbChickenTypes;
+    public int nbChickenTypes;
     private int chickenPickedRandomly;
     private bool isAlreadyCancelled;
     private int nbChickenInstanciated;
