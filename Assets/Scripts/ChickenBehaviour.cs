@@ -8,7 +8,6 @@ public class ChickenBehaviour : MonoBehaviour
     public Vector2 direction;
     public Vector2 henhouse;
     public chickenState state;
-    public bool facingleft = true;
     public enum chickenState { inHenhouse, Captured, Returning };
     // Use this for initialization
     void Start()
