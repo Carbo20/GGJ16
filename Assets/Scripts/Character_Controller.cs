@@ -44,6 +44,8 @@ public class Character_Controller : MonoBehaviour
     [SerializeField] private float m_RollCD = 2f;
     [SerializeField] private float m_rollSpeed = 1f;
     [SerializeField] private float m_rollDuration = 1f;
+    [SerializeField] private float k_RollAttackRadius = 0.4f;
+    [SerializeField] private LayerMask m_WhatIsCharacter;
     private float m_XDirection = 0f;
     private float m_YDirection = 0f;
     ////[SerializeField] private float m_RollForce;
@@ -213,7 +215,24 @@ public class Character_Controller : MonoBehaviour
         else
         {
             if (timeRolling > 0)
+            {
                 timeRolling -= Time.deltaTime;
+
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_RollAttackRadius, m_WhatIsCharacter);
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].gameObject.tag == "Chicken")
+                    {
+                        colliders[i].gameObject.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Captured;
+                        colliders[i].gameObject.transform.parent = myTransform;
+                        chicken = colliders[i].gameObject;
+                        m_HaveChicken = true;
+                        m_Anim.SetBool("carrying", true);
+                        arm.SetActive(true);
+                        break;
+                    }
+                }
+            }
             else
             {
                 m_IsRolling = false;
