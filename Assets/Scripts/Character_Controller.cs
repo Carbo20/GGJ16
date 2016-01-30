@@ -74,8 +74,6 @@ public class Character_Controller : MonoBehaviour
     private Animator m_Anim;                         // Reference to the player's animator component.
     private Rigidbody2D m_Rigidbody2D;                  
     private bool m_FacingRight = true;                  // For determining which way the player is currently facing.
-
-    [SerializeField] private bool m_isJoystickConnected = false;
     #endregion
 
     #region Monobehaviour
@@ -101,8 +99,7 @@ public class Character_Controller : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Read the inputs. 
-   
+        // Read the inputs.    
         float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
         float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
 
@@ -116,7 +113,7 @@ public class Character_Controller : MonoBehaviour
         if (!m_HaveChicken)
             GrabChicken();
         else
-            ThrowChicken();
+            ThrowChicken(h, v);
     }
     #endregion
 
@@ -157,7 +154,7 @@ public class Character_Controller : MonoBehaviour
             t_moveSpeedX = Mathf.Min(Mathf.Max(m_MinSpeed, moveX * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
             t_moveSpeedY = Mathf.Min(Mathf.Max(m_MinSpeed, moveY * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
 
-            if (t_moveSpeedX > -0.1f && t_moveSpeedX < 0.1f && t_moveSpeedY > -0.1f && t_moveSpeedY < 0.1f)
+            if (Mathf.Abs(t_moveSpeedX) < 0.1f && Mathf.Abs(t_moveSpeedY) < 0.1f)
             {
                 m_Anim.SetBool("moving", false);
             }
@@ -255,14 +252,23 @@ public class Character_Controller : MonoBehaviour
             //grab chicken
     }
 
-    private void ThrowChicken()
+    private void ThrowChicken(float moveX, float moveY)
     {
         if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
         {
             chicken.transform.parent = null;
             m_HaveChicken = false;
+
             //todo mettre en inhenhouse si dans le poulailler ou returning sinon
-            chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+            if (Mathf.Abs(moveX) < 0.1f && Mathf.Abs(moveY) < 0.1f)
+            {
+                chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+            }
+            else
+            {
+                chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX, moveY);
+            }
+            chicken = null;
         }
             //Throw chicken
     }
