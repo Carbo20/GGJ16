@@ -97,8 +97,9 @@ public class Character_Controller : MonoBehaviour
     private void FixedUpdate()
     {
         // Read the inputs. 
-        float h = Input.GetAxis("HorizontalP" + PlayerNumber);
-        float v = Input.GetAxis("VerticalP" + PlayerNumber);
+   
+        float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
+        float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
 
         // Pass all parameters to the character control script.
         //Debug.Log("MOOOOOOOOOOOVE  " );
