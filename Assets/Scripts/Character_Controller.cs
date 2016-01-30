@@ -207,6 +207,7 @@ public class Character_Controller : MonoBehaviour
                 timeRolling = m_rollDuration;
                 m_XDirection = x;
                 m_YDirection = y;
+                m_Anim.SetBool("dashing", true);
             }
         }
         else
@@ -218,6 +219,7 @@ public class Character_Controller : MonoBehaviour
                 m_IsRolling = false;
                 Debug.Log("ROLLATTACK END");
                 m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+                m_Anim.SetBool("dashing", false);
             }
         }
     }
