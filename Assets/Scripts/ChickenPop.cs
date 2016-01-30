@@ -18,7 +18,7 @@ public class ChickenPop : MonoBehaviour {
     void Start () {
         nbChickenInstanciated = 0;
         isAlreadyCancelled = false;
-        nbChickenTypes = 3;//Placeholder
+        //nbChickenTypes = 3;//Placeholder
         //ChickenList: (0:Red, 1:Teal,2:Purple...)
         chickenPickedRandomly = Random.Range(0, nbChickenTypes);
         Debug.Log("chickenPickedRandomly: "+ chickenPickedRandomly);
