@@ -10,6 +10,7 @@ public class ChickenBehaviour : MonoBehaviour
     public chickenState state;
     public enum chickenState { inHenhouse, Captured, Returning, Flying };
     [SerializeField]
+    private float flySpeed = 4.2f;
     private float roamingSpeed = 0.7f;
     private float runningSpeed = 2.1f;
     [SerializeField]
@@ -34,7 +35,7 @@ public class ChickenBehaviour : MonoBehaviour
         {
             transform.localPosition = new Vector2(-0.01f, -0.02f);
         }
-        else if (state != chickenState.Flying)
+        else if (state == chickenState.Flying)
         {
             if (transform.position.x > 3)
             {
@@ -56,6 +57,9 @@ public class ChickenBehaviour : MonoBehaviour
                     countdown = 0.7f;
                 }
             }
+        }
+        else
+        {
             transform.Translate(direction * Time.deltaTime * speed);
             if (direction.x < 0.0f)
             {
@@ -66,6 +70,12 @@ public class ChickenBehaviour : MonoBehaviour
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
             }
         }
+    }
+
+    void Flying(Vector2 vFly)
+    {
+        direction.Set(vFly.x, vFly.y);
+        speed = flySpeed;
     }
 
     void OnTriggerExit2D(Collider2D other)
