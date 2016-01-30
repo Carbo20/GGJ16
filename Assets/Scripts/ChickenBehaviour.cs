@@ -32,7 +32,6 @@ public class ChickenBehaviour : MonoBehaviour
         {
             direction.Set(henhouse.x - transform.position.x, henhouse.y - transform.position.y);
             direction.Normalize();
-            //direction.Set(transform.position.x - henhouse.x, transform.position.y - henhouse.y);
         }
         else
         {
@@ -49,18 +48,20 @@ public class ChickenBehaviour : MonoBehaviour
         if (direction.x < 0.0f)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
-            facingleft = direction.x < 0.0f;
         }
         else if (direction.x > 0.0f)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
-            facingleft = direction.x > 0.0f;
         }
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        if (state == chickenState.inHenhouse && other.gameObject.name == "Henhouse")
+        Debug.Log("triggerd");
+        if (other.gameObject.name == "Henhouse")
+        {
+            Debug.Log("exited");
             state = chickenState.Returning;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -71,9 +72,12 @@ public class ChickenBehaviour : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("hitsomething: ");
-        direction.x *= -1;
-        direction.y *= -1;
-        //direction.Normalize();
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            Debug.Log("hitsomething: ");
+            direction.x *= -10;
+            direction.y *= -10;
+            direction.Normalize();
+        }
     }
 }
