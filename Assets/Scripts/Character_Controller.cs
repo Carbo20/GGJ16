@@ -237,10 +237,11 @@ public class Character_Controller : MonoBehaviour
                 if (colliders[i].gameObject.tag == "Chicken")
                 {
                     Debug.Log("GrabChicken SUCCESSSSS");
-                   // colliders[i].gameObject.GetComponent<ChickenBehaviour>().state;
+                    colliders[i].gameObject.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Captured;
                     colliders[i].gameObject.transform.parent = myTransform;
                     chicken = colliders[i].gameObject;
                     m_HaveChicken = true;
+                    break;
                 }
             }
         }
@@ -251,8 +252,11 @@ public class Character_Controller : MonoBehaviour
     {
         if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
         {
+
             chicken.transform.parent = null;
             m_HaveChicken = false;
+            //todo mettre en inhenhouse si dans le poulailler ou returning sinon
+            chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
         }
             //Throw chicken
     }
