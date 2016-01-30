@@ -25,7 +25,7 @@ public class ChickenBehaviour : MonoBehaviour
     {
         if (state == chickenState.Captured)
         {
-            transform.position = new Vector2(-0.01f, -0.02f);
+            transform.localPosition = new Vector2(-0.01f, -0.02f);
 
         }
         else
@@ -60,7 +60,7 @@ public class ChickenBehaviour : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log("triggerd");
-        if (other.gameObject.name == "Henhouse")
+        if (state != chickenState.Captured && other.gameObject.name == "Henhouse")
         {
             Debug.Log("exited");
             state = chickenState.Returning;
