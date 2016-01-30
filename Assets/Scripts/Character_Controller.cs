@@ -64,7 +64,7 @@ public class Character_Controller : MonoBehaviour
     #region CHICKEN
     private bool m_HaveChicken = false;
     [SerializeField] private float m_SpeedModWithChicken = 0.5f;
-    private Transform m_ChickenCheck;   
+    [SerializeField] private Transform m_ChickenCheck;   
     const float k_ChickenCheckRadius = 0.4f;
     [SerializeField] private LayerMask m_WhatIsChicken;
     private GameObject chicken;
@@ -83,7 +83,7 @@ public class Character_Controller : MonoBehaviour
     private void Awake()
     {
         // Setting up references.
-        m_ChickenCheck = transform.Find("ChickenCheck");
+        //m_ChickenCheck = transform.Find("ChickenCheck");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
