@@ -157,6 +157,15 @@ public class Character_Controller : MonoBehaviour
             t_moveSpeedX = Mathf.Min(Mathf.Max(m_MinSpeed, moveX * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
             t_moveSpeedY = Mathf.Min(Mathf.Max(m_MinSpeed, moveY * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
 
+            if (t_moveSpeedX > -0.1f && t_moveSpeedX < 0.1f && t_moveSpeedY > -0.1f && t_moveSpeedY < 0.1f)
+            {
+                m_Anim.SetBool("moving", false);
+            }
+            else
+            {
+                m_Anim.SetBool("moving", true);
+            }
+
             m_Rigidbody2D.velocity = new Vector2(t_moveSpeedX, t_moveSpeedY); // Move the character
 
             if (moveX > 0 && !m_FacingRight) // If the input is moving the player right and the player is facing left...
