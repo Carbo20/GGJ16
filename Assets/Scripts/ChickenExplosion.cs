@@ -26,12 +26,19 @@ public class ChickenExplosion : MonoBehaviour {
         //lancer l'animation d'explosion
         //poser le cadavre
         GetComponent<ChickenBehaviour>().enabled = true;
-        GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+        if(transform.position.x > 3)
+            GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+        else
+            GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
         GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
         enabled = false;
         //Destroy(this.gameObject);
     }
 
+    private void CheckCollision()
+    {
+
+    }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
@@ -55,7 +62,6 @@ public class ChickenExplosion : MonoBehaviour {
 
             collision.gameObject.GetComponent<Character_Controller>().m_IsRolling = false;
             collision.gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("dashing", false);
-
 
 
             collision.gameObject.GetComponent<Character_Controller>().m_StunLeft = collision.gameObject.GetComponent<Character_Controller>().m_StunDuration;
