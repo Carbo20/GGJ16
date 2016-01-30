@@ -64,6 +64,10 @@ public class Character_Controller : MonoBehaviour
     #region CHICKEN
     private bool m_HaveChicken = false;
     [SerializeField] private float m_SpeedModWithChicken = 0.5f;
+    private Transform m_ChickenCheck;   
+    const float k_ChickenCheckRadius = 0.4f;
+    [SerializeField] private LayerMask m_WhatIsChicken;
+    private GameObject chicken;
     #endregion
 
     #region TEST ASSET 2D
@@ -79,6 +83,7 @@ public class Character_Controller : MonoBehaviour
     private void Awake()
     {
         // Setting up references.
+        m_ChickenCheck = transform.Find("ChickenCheck");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
@@ -101,12 +106,17 @@ public class Character_Controller : MonoBehaviour
         float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
         float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
 
-        // Pass all parameters to the character control script.
-        //Debug.Log("MOOOOOOOOOOOVE  " );
-        CheckRoll(h, v);
+        if (!m_HaveChicken)
+            CheckRoll(h, v);
+
         Move(h, v, m_Roll);
+        
         m_Roll = false;
 
+        if (!m_HaveChicken)
+            GrabChicken();
+        else
+            ThrowChicken();
     }
     #endregion
 
@@ -179,11 +189,11 @@ public class Character_Controller : MonoBehaviour
 
         if (!m_IsRolling)
         {
-            if ( (x!=0 || y!=0) && m_rollCDLeft <= 0 && (Input.GetButtonDown("Roll")))
+            if ( (x!=0 || y!=0) && m_rollCDLeft <= 0 && (Input.GetButtonDown("RollP" + PlayerNumber)))
             {
                 m_Roll = true;
                 m_rollCDLeft = m_RollCD;
-                Debug.Log("ROLLATTACK  X= " + x + "  Y= " + y + "   Joystick: " + Input.GetJoystickNames()[0]);
+                Debug.Log("ROLLATTACK  X= " + x + "  Y= " + y);
                 m_IsRolling = true;
                 timeRolling = m_rollDuration;
                 m_XDirection = x;
@@ -213,4 +223,38 @@ public class Character_Controller : MonoBehaviour
     }
     #endregion
 
+
+    #region CHICKEN
+    private void GrabChicken()
+    {
+        if (!m_IsRolling && Input.GetButtonDown("ManageChickenP" + PlayerNumber))
+        {
+            Debug.Log("GrabChicken");
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_ChickenCheckRadius, m_WhatIsChicken);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                Debug.Log("GrabChicken MEH");
+                if (colliders[i].gameObject.tag == "Chicken")
+                {
+                    Debug.Log("GrabChicken SUCCESSSSS");
+                   // colliders[i].gameObject.GetComponent<ChickenBehaviour>().state;
+                    colliders[i].gameObject.transform.parent = myTransform;
+                    chicken = colliders[i].gameObject;
+                    m_HaveChicken = true;
+                }
+            }
+        }
+            //grab chicken
+    }
+
+    private void ThrowChicken()
+    {
+        if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
+        {
+            chicken.transform.parent = null;
+            m_HaveChicken = false;
+        }
+            //Throw chicken
+    }
+    #endregion
 }
