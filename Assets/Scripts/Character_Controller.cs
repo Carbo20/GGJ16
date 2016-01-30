@@ -54,6 +54,9 @@ public class Character_Controller : MonoBehaviour
     private float timeRolling;
     
     private float m_rollCDLeft;
+    private bool m_Stunned = false;
+    [SerializeField] private float m_StunDuration = 0.5f;
+    private float m_StunLeft = 0f;
     #endregion
 
     #region RUN&SPRINT
@@ -99,26 +102,31 @@ public class Character_Controller : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-               
+        if (!m_Stunned)
+        {
+            // Read the inputs.    
+            float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
+            float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
+
+            if (!m_HaveChicken)
+                CheckRoll(h, v);
+
+            Move(h, v, m_Roll);
+
+            m_Roll = false;
+
+            if (!m_HaveChicken)
+                GrabChicken();
+            else
+                ThrowChicken(h, v);
+        }
+        else
+            CheckStunned();
     }
 
     private void FixedUpdate()
     {
-        // Read the inputs.    
-        float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
-        float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
 
-        if (!m_HaveChicken)
-            CheckRoll(h, v);
-
-        Move(h, v, m_Roll);
-        
-        m_Roll = false;
-
-        if (!m_HaveChicken)
-            GrabChicken();
-        else
-            ThrowChicken(h, v);
     }
     #endregion
 
@@ -218,20 +226,17 @@ public class Character_Controller : MonoBehaviour
             {
                 timeRolling -= Time.deltaTime;
 
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_RollAttackRadius, m_WhatIsCharacter);
-                for (int i = 0; i < colliders.Length; i++)
-                {
-                    if (colliders[i].gameObject.tag == "Chicken")
-                    {
-                        colliders[i].gameObject.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Captured;
-                        colliders[i].gameObject.transform.parent = myTransform;
-                        chicken = colliders[i].gameObject;
-                        m_HaveChicken = true;
-                        m_Anim.SetBool("carrying", true);
-                        arm.SetActive(true);
-                        break;
-                    }
-                }
+                //Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_RollAttackRadius, m_WhatIsCharacter);
+                //for (int i = 0; i < colliders.Length; i++)
+                //{
+                //    if (colliders[i].gameObject.tag == "Player" && colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber != PlayerNumber)
+                //    {
+                //        Debug.Log("Player " + PlayerNumber + " is stunning player " + colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber);
+                //        colliders[i].gameObject.GetComponent<Character_Controller>().m_Stunned = true;
+                //        colliders[i].gameObject.GetComponent<Character_Controller>().m_StunLeft = m_StunDuration;
+                //        colliders[i].gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
+                //    }
+                //}
             }
             else
             {
@@ -250,6 +255,22 @@ public class Character_Controller : MonoBehaviour
 
         if (m_IsRolling && rollType == RollType.ROLLVELOCITY)
             m_Rigidbody2D.velocity = new Vector2( m_XDirection * m_rollSpeed * Time.deltaTime, m_YDirection * m_rollSpeed * Time.deltaTime);
+    }
+    #endregion
+
+    #region STUNNED
+    private void CheckStunned()
+    {
+        if (m_StunLeft > 0)
+        {
+            m_StunLeft -= Time.deltaTime;
+            m_Anim.SetBool("stunned", true);
+        }
+        else
+        {
+            m_Stunned = false;
+            m_Anim.SetBool("stunned", false);
+        }
     }
     #endregion
 
@@ -273,33 +294,80 @@ public class Character_Controller : MonoBehaviour
                 }
             }
         }
+        else if (!m_IsRolling && Input.GetButtonDown("PutChickenDownP" + PlayerNumber))
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_ChickenCheckRadius, m_WhatIsChicken);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.tag == "Chicken")
+                {
+                    colliders[i].gameObject.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Captured;
+                    colliders[i].gameObject.transform.parent = myTransform;
+                    chicken = colliders[i].gameObject;
+                    m_HaveChicken = true;
+                    m_Anim.SetBool("carrying", true);
+                    arm.SetActive(true);
+                    break;
+                }
+            }
+        }
             //grab chicken
     }
 
     private void ThrowChicken(float moveX, float moveY)
     {
-        if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
+        if (chicken != null)
         {
-            chicken.transform.parent = null;
-            m_HaveChicken = false;
-            m_Anim.SetBool("carrying", false);
-            arm.SetActive(false);
+            if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
+            {
+                chicken.transform.parent = null;
+                m_HaveChicken = false;
+                m_Anim.SetBool("carrying", false);
+                arm.SetActive(false);
 
-            //todo mettre en inhenhouse si dans le poulailler ou returning sinon
-            if (Mathf.Abs(moveX) < 0.1f && Mathf.Abs(moveY) < 0.1f)
+                //todo mettre en inhenhouse si dans le poulailler ou returning sinon
+                if (Mathf.Abs(moveX) < 0.1f && Mathf.Abs(moveY) < 0.1f)
+                {
+                    chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                }
+                else
+                {
+                    chicken.GetComponent<ChickenBehaviour>().enabled = false;
+                    chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX * 10, moveY * 10);
+                    chicken.GetComponent<ChickenExplosion>().enabled = true;
+                    //rajouter un cd de mort pour le chicken
+                }
+                chicken = null;
+            }
+            else if (Input.GetButtonDown("PutChickenDownP" + PlayerNumber))
             {
+                chicken.transform.parent = null;
+                m_HaveChicken = false;
+                m_Anim.SetBool("carrying", false);
+                arm.SetActive(false);
+
                 chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+
+                chicken = null;
             }
-            else
-            {
-                chicken.GetComponent<ChickenBehaviour>().enabled = false;
-                chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX*10, moveY*10);
-                chicken.GetComponent<ChickenExplosion>().enabled = true;
-                //rajouter un cd de mort pour le chicken
-            }
-            chicken = null;
         }
             //Throw chicken
     }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (m_IsRolling && collision.gameObject.tag == "Player")
+        {
+            //check stun...
+            Debug.Log("TRIGGER Stunned!");
+
+            Debug.Log("Player " + PlayerNumber + " is stunning player " + collision.gameObject.GetComponent<Character_Controller>().PlayerNumber);
+            collision.gameObject.GetComponent<Character_Controller>().m_Stunned = true;
+            collision.gameObject.GetComponent<Character_Controller>().m_StunLeft = m_StunDuration;
+            collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
+        }
+
+    }
+
     #endregion
 }

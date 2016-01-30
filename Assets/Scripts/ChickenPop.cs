@@ -21,7 +21,7 @@ public class ChickenPop : MonoBehaviour {
         //nbChickenTypes = 3;//Placeholder
         //ChickenList: (0:Red, 1:Teal,2:Purple...)
         chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
-        Debug.Log("chickenPickedRandomly: "+ chickenPickedRandomly);
+        //Debug.Log("chickenPickedRandomly: "+ chickenPickedRandomly);
         if (chickenGo == null)
         {
             InvokeRepeating("SpawnChicken", popTime, popTime);

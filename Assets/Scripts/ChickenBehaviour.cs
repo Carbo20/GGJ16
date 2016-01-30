@@ -68,6 +68,16 @@ public class ChickenBehaviour : MonoBehaviour
         }
     }
 
+    void OnTriggerExit2D(Collider2D other)
+    {
+        //Debug.Log("triggerd");
+        if (state != chickenState.Captured && other.gameObject.name == "Henhouse")
+        {
+            //Debug.Log("exited");
+            state = chickenState.Returning;
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (state == chickenState.Returning && other.gameObject.name == "Henhouse")
