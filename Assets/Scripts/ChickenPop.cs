@@ -7,10 +7,9 @@ public class ChickenPop : MonoBehaviour {
     int maxChickenNb;
     GameObject chickenGo;
     [SerializeField]
-    List<GameObject>  chickenGoList;
+    public List<GameObject>  chickenGoList;
     [SerializeField]
     private float popTime;
-    public int nbChickenTypes;
     private int chickenPickedRandomly;
     private bool isAlreadyCancelled;
     private int nbChickenInstanciated;
@@ -20,7 +19,7 @@ public class ChickenPop : MonoBehaviour {
         isAlreadyCancelled = false;
         //nbChickenTypes = 3;//Placeholder
         //ChickenList: (0:Red, 1:Teal,2:Purple...)
-        chickenPickedRandomly = Random.Range(0, nbChickenTypes);
+        chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
         Debug.Log("chickenPickedRandomly: "+ chickenPickedRandomly);
         if (chickenGo == null)
         {
@@ -32,8 +31,9 @@ public class ChickenPop : MonoBehaviour {
     void SpawnChicken()
     {
         chickenGo = Instantiate(chickenGoList[chickenPickedRandomly]);//as GameObject;
+        chickenGo.transform.position = transform.position;
         nbChickenInstanciated++;
-        chickenPickedRandomly = Random.Range(0, nbChickenTypes);
+        chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
     }
     // Update is called once per frame
     void Update () {

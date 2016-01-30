@@ -79,5 +79,6 @@ public class ChickenBehaviour : MonoBehaviour
             direction.y *= -10;
             direction.Normalize();
         }
+
     }
 }
