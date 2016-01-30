@@ -9,7 +9,7 @@ public class ChickenExplosion : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        m_FlyingChickenDuration = 1.5f;
+        m_FlyingChickenDuration = 1f;
         m_ChickenLaunched = 0;
     }
 

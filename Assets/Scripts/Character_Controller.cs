@@ -275,6 +275,7 @@ public class Character_Controller : MonoBehaviour
             {
                 chicken.GetComponent<ChickenBehaviour>().enabled = false;
                 chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX*10, moveY*10);
+                chicken.GetComponent<ChickenExplosion>().enabled = true;
                 //rajouter un cd de mort pour le chicken
             }
             chicken = null;
