@@ -70,7 +70,7 @@ public class Character_Controller : MonoBehaviour
     #endregion
 
     #region CHICKEN
-    private bool m_HaveChicken = false;
+    public bool m_HaveChicken = false;
     [SerializeField] private float m_SpeedModWithChicken = 0.5f;
     [SerializeField] private Transform m_ChickenCheck;   
     const float k_ChickenCheckRadius = 0.4f;
@@ -80,7 +80,7 @@ public class Character_Controller : MonoBehaviour
 
     #region TEST ASSET 2D
     private Animator m_Anim;                         // Reference to the player's animator component.
-    private Rigidbody2D m_Rigidbody2D;                  
+    public Rigidbody2D m_Rigidbody2D;                  
     private bool m_FacingRight = true;                  // For determining which way the player is currently facing.
     #endregion
 
@@ -270,6 +270,7 @@ public class Character_Controller : MonoBehaviour
         {
             m_Stunned = false;
             m_Anim.SetBool("stunned", false);
+            GetComponent<Rigidbody2D>().isKinematic = false;
         }
     }
     #endregion
@@ -354,6 +355,9 @@ public class Character_Controller : MonoBehaviour
             //Throw chicken
     }
 
+
+    #endregion
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (m_IsRolling && collision.gameObject.tag == "Player")
@@ -362,12 +366,30 @@ public class Character_Controller : MonoBehaviour
             Debug.Log("TRIGGER Stunned!");
 
             Debug.Log("Player " + PlayerNumber + " is stunning player " + collision.gameObject.GetComponent<Character_Controller>().PlayerNumber);
+
+            if (collision.gameObject.GetComponent<Character_Controller>().m_HaveChicken)
+            {
+                collision.gameObject.GetComponent<Character_Controller>().chicken.transform.parent = null;
+                collision.gameObject.GetComponent<Character_Controller>().m_HaveChicken = false;
+                collision.gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("carrying", false);
+                collision.gameObject.GetComponent<Character_Controller>().arm.SetActive(false);
+
+                collision.gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+
+                collision.gameObject.GetComponent<Character_Controller>().chicken = null;
+            }
+
             collision.gameObject.GetComponent<Character_Controller>().m_Stunned = true;
+
+            collision.gameObject.GetComponent<Character_Controller>().m_IsRolling = false;
+            collision.gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("dashing", false);
+
+            
+
             collision.gameObject.GetComponent<Character_Controller>().m_StunLeft = m_StunDuration;
-            collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
+            collision.gameObject.GetComponent<Character_Controller>().m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+            collision.gameObject.GetComponent<Character_Controller>().m_Rigidbody2D.isKinematic = true;
         }
 
     }
-
-    #endregion
 }
