@@ -9,6 +9,10 @@ public class ChickenBehaviour : MonoBehaviour
     public Vector2 henhouse;
     public chickenState state;
     public enum chickenState { inHenhouse, Captured, Returning };
+
+    [SerializeField]
+    private ChickenColors color;
+
     // Use this for initialization
     void Start()
     {
@@ -83,5 +87,10 @@ public class ChickenBehaviour : MonoBehaviour
             direction.Normalize();
         }
 
+    }
+
+    public ChickenColors GetColor()
+    {
+        return color;
     }
 }
