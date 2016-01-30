@@ -78,8 +78,8 @@ public class ChickenBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Wall"))
         {
             Debug.Log("hitsomething: ");
-            direction.x *= -10;
-            direction.y *= -10;
+            direction.x *= -1;
+            direction.y *= -1;
             direction.Normalize();
         }
 
