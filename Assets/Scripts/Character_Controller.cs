@@ -50,23 +50,18 @@ public class Character_Controller : MonoBehaviour
     private float m_YDirection = 0f;
     ////[SerializeField] private float m_RollForce;
     
-    private bool m_IsRolling;
+    public bool m_IsRolling;
     private float timeRolling;
     
     private float m_rollCDLeft;
-    private bool m_Stunned = false;
-    [SerializeField] private float m_StunDuration = 0.5f;
-    private float m_StunLeft = 0f;
+    public bool m_Stunned = false;
+    public float m_StunDuration = 0.5f;
+    public float m_StunLeft = 0f;
     #endregion
 
     #region RUN&SPRINT
     [SerializeField] private float m_MaxSpeed = 10f;                // The normal speed the player can travel in the axis.
     [SerializeField] private float m_MinSpeed = -10f;                // The normal speed the player can travel in the axis.
-    #endregion
-
-    #region STUNNED
-    private bool stunned = false;
-    private float stunDuration = 0f;
     #endregion
 
     #region CHICKEN
@@ -75,11 +70,11 @@ public class Character_Controller : MonoBehaviour
     [SerializeField] private Transform m_ChickenCheck;   
     const float k_ChickenCheckRadius = 0.4f;
     [SerializeField] private LayerMask m_WhatIsChicken;
-    private GameObject chicken;
+    public GameObject chicken;
     #endregion
 
     #region TEST ASSET 2D
-    private Animator m_Anim;                         // Reference to the player's animator component.
+    public Animator m_Anim;                         // Reference to the player's animator component.
     public Rigidbody2D m_Rigidbody2D;                  
     private bool m_FacingRight = true;                  // For determining which way the player is currently facing.
     #endregion
@@ -196,6 +191,13 @@ public class Character_Controller : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+
+        if (chicken != null)
+        {
+            Vector3 theScaleChicken = chicken.transform.localScale;
+            theScaleChicken.x *= -1;
+            chicken.transform.localScale = theScaleChicken;
+        }
     }
     #endregion
 
