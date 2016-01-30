@@ -54,6 +54,6 @@ public class SacrificeDalleManager : MonoBehaviour {
             }
         }
         Destroy(chicken.gameObject);
-        //todo decrementer nb poule
+        GameManager.nbChickens--;
     }
 }
