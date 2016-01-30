@@ -234,20 +234,16 @@ public class Character_Controller : MonoBehaviour
     }
     #endregion
 
-
     #region CHICKEN
     private void GrabChicken()
     {
         if (!m_IsRolling && Input.GetButtonDown("ManageChickenP" + PlayerNumber))
         {
-            Debug.Log("GrabChicken");
             Collider2D[] colliders = Physics2D.OverlapCircleAll(m_ChickenCheck.position, k_ChickenCheckRadius, m_WhatIsChicken);
             for (int i = 0; i < colliders.Length; i++)
             {
-                Debug.Log("GrabChicken MEH");
                 if (colliders[i].gameObject.tag == "Chicken")
                 {
-                    Debug.Log("GrabChicken SUCCESSSSS");
                     colliders[i].gameObject.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Captured;
                     colliders[i].gameObject.transform.parent = myTransform;
                     chicken = colliders[i].gameObject;
@@ -263,7 +259,6 @@ public class Character_Controller : MonoBehaviour
     {
         if (Input.GetButtonDown("ManageChickenP" + PlayerNumber))
         {
-
             chicken.transform.parent = null;
             m_HaveChicken = false;
             //todo mettre en inhenhouse si dans le poulailler ou returning sinon
