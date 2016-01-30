@@ -32,19 +32,8 @@ public class Character_Controller : MonoBehaviour
     private enum Dir { NONE, EAST, WEST, SOUTH, NORTH };
     private Dir characterDir;    // public only for testing
     private Transform myTransform;
-    private List<int> m_SpeedModKeys;
-    private Dictionary<int, m_SpeedModificators> m_SpeedMod; // int -> id of the speed modif (spider web, buff...)
 
-    public struct m_SpeedModificators {
-        public float value;
-        public float duration;
-
-        public m_SpeedModificators(float _value, float _duration)
-            {
-                value = _value;
-                duration = _duration;
-            }
-    }
+    public int PlayerNumber;
 
     #region ROLL ATTACK
     private bool m_Roll;
@@ -98,9 +87,6 @@ public class Character_Controller : MonoBehaviour
         m_IsRolling = false;
         m_rollCDLeft = 0;
         myTransform = this.transform;
-
-        m_SpeedModKeys = new List<int>();
-        m_SpeedMod = new Dictionary<int, m_SpeedModificators>();
     }
 	
 	// Update is called once per frame
@@ -111,8 +97,8 @@ public class Character_Controller : MonoBehaviour
     private void FixedUpdate()
     {
         // Read the inputs. 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("HorizontalP" + PlayerNumber);
+        float v = Input.GetAxis("VerticalP" + PlayerNumber);
 
         // Pass all parameters to the character control script.
         //Debug.Log("MOOOOOOOOOOOVE  " );
@@ -157,8 +143,8 @@ public class Character_Controller : MonoBehaviour
             if(m_HaveChicken)
                 SpeedMult = m_SpeedModWithChicken;
  
-            t_moveSpeedX = Mathf.Min(Mathf.Max(m_MinSpeed, moveX * m_MaxSpeed * Time.deltaTime * 50 * SpeedMult), m_MaxSpeed);
-            t_moveSpeedY = Mathf.Min(Mathf.Max(m_MinSpeed, moveY * m_MaxSpeed * Time.deltaTime * 50 * SpeedMult), m_MaxSpeed);
+            t_moveSpeedX = Mathf.Min(Mathf.Max(m_MinSpeed, moveX * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
+            t_moveSpeedY = Mathf.Min(Mathf.Max(m_MinSpeed, moveY * m_MaxSpeed * Time.deltaTime * SpeedMult), m_MaxSpeed);
 
             m_Rigidbody2D.velocity = new Vector2(t_moveSpeedX, t_moveSpeedY); // Move the character
 
