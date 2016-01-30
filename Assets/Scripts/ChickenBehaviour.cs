@@ -26,32 +26,36 @@ public class ChickenBehaviour : MonoBehaviour
     {
         if (state == chickenState.Captured)
         {
+            transform.position = new Vector2(-0.01f, -0.02f);
 
-        }
-        else if (state == chickenState.Returning)
-        {
-            direction.Set(henhouse.x - transform.position.x, henhouse.y - transform.position.y);
-            direction.Normalize();
         }
         else
         {
-            countdown -= Time.deltaTime;
-            if (countdown <= 0.0f)
+            if (state == chickenState.Returning)
             {
-                do direction.Set(Random.Range(-10, 10), Random.Range(-10, 10));
-                while (direction.x == 0 && direction.y == 0);
+                direction.Set(henhouse.x - transform.position.x, henhouse.y - transform.position.y);
                 direction.Normalize();
-                countdown = 0.7f;
             }
-        }
-        transform.Translate(direction * Time.deltaTime * speed);
-        if (direction.x < 0.0f)
-        {
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (direction.x > 0.0f)
-        {
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            else
+            {
+                countdown -= Time.deltaTime;
+                if (countdown <= 0.0f)
+                {
+                    do direction.Set(Random.Range(-10, 10), Random.Range(-10, 10));
+                    while (direction.x == 0 && direction.y == 0);
+                    direction.Normalize();
+                    countdown = 0.7f;
+                }
+            }
+            transform.Translate(direction * Time.deltaTime * speed);
+            if (direction.x < 0.0f)
+            {
+                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (direction.x > 0.0f)
+            {
+                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
     }
     void OnTriggerExit2D(Collider2D other)
