@@ -11,7 +11,7 @@ public class ChickenBehaviour : MonoBehaviour
     public enum chickenState { inHenhouse, Captured, Returning };
 
     [SerializeField]
-    private ChickenColors color;
+    public ChickenColors color;
 
     // Use this for initialization
     void Start()
