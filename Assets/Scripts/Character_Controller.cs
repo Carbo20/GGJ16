@@ -35,6 +35,9 @@ public class Character_Controller : MonoBehaviour
 
     public int PlayerNumber;
 
+    [SerializeField]
+    public GameObject arm;
+
     #region ROLL ATTACK
     private bool m_Roll;
     ////[SerializeField] private float m_rollDistance;
@@ -245,6 +248,8 @@ public class Character_Controller : MonoBehaviour
                     colliders[i].gameObject.transform.parent = myTransform;
                     chicken = colliders[i].gameObject;
                     m_HaveChicken = true;
+                    m_Anim.SetBool("carrying", true);
+                    arm.SetActive(true);
                     break;
                 }
             }
@@ -258,6 +263,8 @@ public class Character_Controller : MonoBehaviour
         {
             chicken.transform.parent = null;
             m_HaveChicken = false;
+            m_Anim.SetBool("carrying", false);
+            arm.SetActive(false);
 
             //todo mettre en inhenhouse si dans le poulailler ou returning sinon
             if (Mathf.Abs(moveX) < 0.1f && Mathf.Abs(moveY) < 0.1f)
