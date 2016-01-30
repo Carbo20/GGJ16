@@ -8,13 +8,12 @@ public class SacrificeDalleManager : MonoBehaviour {
 
     [SerializeField]
     private int playerNumber;
+    [SerializeField]
     private ChickenColors nextColorNeeded;
     [SerializeField]
     private int nbChickenSacrificed;
     [SerializeField]
     private int nbChickenNeeded = 5;
-    [SerializeField]
-    private GameObject chick;
     [SerializeField]
     List<Sprite> dead_chickens_sprites;
     [SerializeField]
@@ -44,10 +43,11 @@ public class SacrificeDalleManager : MonoBehaviour {
     {
         if (chicken.GetColor() == nextColorNeeded)
         {
-            nbChickenSacrificed++;
+            
             nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
             dead_chickens_gao[nbChickenSacrificed].GetComponent<SpriteRenderer>().sprite = dead_chickens_sprites[(int)chicken.GetColor()];
             dead_chickens_gao[nbChickenSacrificed].SetActive(true);
+            nbChickenSacrificed++;
             if (nbChickenSacrificed == nbChickenNeeded)
             {
                 Debug.Log("Player " + playerNumber + " wins!");

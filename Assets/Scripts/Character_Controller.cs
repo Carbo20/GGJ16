@@ -11,6 +11,12 @@ using System.Collections.Generic;
 /// </summary>
 public class Character_Controller : MonoBehaviour
 {
+    private Vector3 playerPos;
+    [SerializeField]
+    float range;
+
+    [SerializeField]
+    GameObject target;
 
     #region Test des différents types de mouvements
 
@@ -32,7 +38,7 @@ public class Character_Controller : MonoBehaviour
     private enum Dir { NONE, EAST, WEST, SOUTH, NORTH };
     private Dir characterDir;    // public only for testing
     private Transform myTransform;
-
+    private int maxPlayerNb;
     public int PlayerNumber;
 
     [SerializeField]
@@ -77,6 +83,7 @@ public class Character_Controller : MonoBehaviour
     public Animator m_Anim;                         // Reference to the player's animator component.
     public Rigidbody2D m_Rigidbody2D;                  
     private bool m_FacingRight = true;                  // For determining which way the player is currently facing.
+    private bool isOnDunkRange = false;
     #endregion
 
     #region Monobehaviour
@@ -90,6 +97,11 @@ public class Character_Controller : MonoBehaviour
     }
 
 	void Start () {
+        maxPlayerNb = 4;
+        //targetList = new Vector3[maxPlayerNb];
+       // Debug.Log("targetList"+targetList[0]);
+       // targetList[PlayerNumber - 1] = GameObject.FindGameObjectWithTag("zonePlayer" + PlayerNumber).transform.localPosition;
+        
         m_IsRolling = false;
         m_rollCDLeft = 0;
         myTransform = this.transform;
@@ -97,11 +109,23 @@ public class Character_Controller : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetButtonDown("DunkP" + PlayerNumber)  && isOnDunkRange && chicken!=null)// && OnRangeFromPlayer(range, target.transform.localPosition))
+        {
+            
+            Debug.Log("empalle");
+
+            Dunk();
+        }
+
         if (!m_Stunned)
         {
             // Read the inputs.    
             float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
             float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
+        
+       
+    
+
 
             if (!m_HaveChicken)
                 CheckRoll(h, v);
@@ -317,6 +341,15 @@ public class Character_Controller : MonoBehaviour
             //grab chicken
     }
 
+    private void Dunk()
+    {
+        target.gameObject.GetComponent<SacrificeDalleManager>().AddChicken(chicken.GetComponent<ChickenBehaviour>());
+        chicken.transform.parent = null;
+        m_HaveChicken = false;
+        m_Anim.SetBool("carrying", false);
+        arm.SetActive(false);
+    }
+
     private void ThrowChicken(float moveX, float moveY)
     {
         if (chicken != null)
@@ -354,14 +387,28 @@ public class Character_Controller : MonoBehaviour
                 chicken = null;
             }
         }
-            //Throw chicken
+        //Throw chicken
+      
     }
 
 
-    #endregion
 
+    #endregion
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "zonePlayer" && PlayerNumber == collision.gameObject.GetComponent<SacrificeDalleManager>().GetPlayerNumber())
+        {
+           
+            isOnDunkRange = false;
+        }
+    }
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.gameObject.tag =="zonePlayer" && PlayerNumber == collision.gameObject.GetComponent<SacrificeDalleManager>().GetPlayerNumber())
+        {
+
+            isOnDunkRange = true;
+        }
         if (m_IsRolling && collision.gameObject.tag == "Player")
         {
             //check stun...
@@ -394,4 +441,32 @@ public class Character_Controller : MonoBehaviour
         }
 
     }
+
+    public bool OnRangeFromPlayer(float range, Vector2 target)
+    {
+        playerPos = transform.position;
+        if (Vector2.Distance(PlayerPos, target) <= range)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public Vector2 PlayerPos
+    {
+        get
+        {
+            return playerPos;
+        }
+
+        set
+        {
+            playerPos = value;
+        }
+    }
+     
+
 }
