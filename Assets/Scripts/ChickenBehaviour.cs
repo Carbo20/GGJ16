@@ -23,6 +23,8 @@ public class ChickenBehaviour : MonoBehaviour
     public int m_PlayerThrowing;
     const float k_CollisionRadius = 0.6f;
     [SerializeField] private LayerMask m_WhatIsPlayer;
+
+    [SerializeField] GameObject dead_chicken;
     #endregion
 
     // Use this for initialization
@@ -110,6 +112,9 @@ public class ChickenBehaviour : MonoBehaviour
             {
                 colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
 
+                GameManager.nbChickens--;
+                GameObject corpse = Instantiate(dead_chicken);
+                corpse.transform.position = transform.position;
                 Destroy(this.gameObject);
             }
         }
@@ -149,7 +154,12 @@ public class ChickenBehaviour : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
             if (m_ChickenLaunched > 0 && m_ChickenLaunched < m_FlyingChickenDuration)
             {
-                EndThrow();
+                Debug.Log("WAKEUP");
+                GameManager.nbChickens--;
+                GameObject corpse = Instantiate(dead_chicken);
+                corpse.transform.position = transform.position;
+                Destroy(this.gameObject);
+                //EndThrow();
             }
 
             direction.x *= -1;
