@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum ChickenColors { WHITE, BLUE, RED, YELLOW, GREEN, NB_CHICKEN_COLOR };
+public enum ChickenColors { WHITE, BLUE, RED, YELLOW, GREEN, EXPLO, NB_CHICKEN_COLOR };
 
 public class SacrificeDalleManager : MonoBehaviour {
 
@@ -25,7 +25,7 @@ public class SacrificeDalleManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
+        nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR-1);
         indicator_gao.GetComponent<SpriteRenderer>().color = color_indicator[(int)nextColorNeeded];
         nbChickenSacrificed = 0;
     }
@@ -49,7 +49,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         if (chicken.GetColor() == nextColorNeeded)
         {
             
-            nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
+            nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR-1);
             indicator_gao.GetComponent<SpriteRenderer>().color = color_indicator[(int)nextColorNeeded];
             dead_chickens_gao[nbChickenSacrificed].GetComponent<SpriteRenderer>().sprite = dead_chickens_sprites[(int)chicken.GetColor()];
             StartCoroutine("SetActiveChicken");

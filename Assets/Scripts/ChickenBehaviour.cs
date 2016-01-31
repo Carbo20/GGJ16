@@ -23,8 +23,17 @@ public class ChickenBehaviour : MonoBehaviour
     public int m_PlayerThrowing;
     const float k_CollisionRadius = 0.6f;
     [SerializeField] private LayerMask m_WhatIsPlayer;
+    [SerializeField] private LayerMask m_WhatIsChicken;
 
-    [SerializeField] public GameObject dead_chicken;
+
+    public GameObject dead_chicken;
+    [SerializeField] GameObject explosion;
+
+    [SerializeField] private bool m_Explosive = false;
+    const float k_ExplosionRadius = 1.2f;
+
+    bool dead = false;
+
     #endregion
 
     // Use this for initialization
@@ -111,12 +120,48 @@ public class ChickenBehaviour : MonoBehaviour
             if (colliders[i].gameObject.tag == "Player" && m_PlayerThrowing != colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber)
             {
                 colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
-                GameManager.nbChickens--;
-                GameObject corpse = Instantiate(dead_chicken);
-                corpse.transform.position = transform.position;
-                Destroy(this.gameObject);
+                Die();
                 break;
             }
+        }
+    }
+
+    private void Die()
+    {
+        if (!dead)
+        {
+            dead = true;
+            GameManager.nbChickens--;
+            GameObject corpse = Instantiate(dead_chicken);
+            corpse.transform.position = transform.position;
+
+            if (m_Explosive)
+            {
+                //lancer l'explosion
+                GameObject explode = Instantiate(explosion);
+                explode.transform.position = transform.position;
+
+                // Tuer tous les chickens dans un radius autour
+                Collider2D[] collidersChicken = Physics2D.OverlapCircleAll(transform.position, k_ExplosionRadius, m_WhatIsChicken);
+                for (int i = 0; i < collidersChicken.Length; i++)
+                {
+                    if (collidersChicken[i].gameObject.tag == "Chicken")
+                    {
+                        collidersChicken[i].gameObject.GetComponent<ChickenBehaviour>().Die();
+                    }
+                }
+                // Stun tous les joueurs dans ce radius
+                Collider2D[] collidersPlayer = Physics2D.OverlapCircleAll(transform.position, k_ExplosionRadius, m_WhatIsPlayer);
+                for (int i = 0; i < collidersPlayer.Length; i++)
+                {
+                    if (collidersPlayer[i].gameObject.tag == "Player")
+                    {
+                        collidersPlayer[i].gameObject.GetComponent<Character_Controller>().Stunned();
+                    }
+                }
+            }
+
+            Destroy(this.gameObject);
         }
     }
 
@@ -155,10 +200,7 @@ public class ChickenBehaviour : MonoBehaviour
             if (m_ChickenLaunched > 0 && m_ChickenLaunched < m_FlyingChickenDuration)
             {
                 Debug.Log("WAKEUP");
-                GameManager.nbChickens--;
-                GameObject corpse = Instantiate(dead_chicken);
-                corpse.transform.position = transform.position;
-                Destroy(this.gameObject);
+                Die();
                 //EndThrow();
             }
 
