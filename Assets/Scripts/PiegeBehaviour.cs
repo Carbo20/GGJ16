@@ -44,12 +44,21 @@ public class PiegeBehaviour : MonoBehaviour {
         Vector2 VTopLeft = new Vector2(m_TopLeft.transform.position.x, m_TopLeft.transform.position.y);
         Vector2 VBottomRight = new Vector2(m_BottomRight.transform.position.x, m_BottomRight.transform.position.y);
 
-        Collider2D[] colliders = Physics2D.OverlapAreaAll(VTopLeft, VBottomRight, m_WhatIsPlayer);
-        for (int i = 0; i < colliders.Length; i++)
+        Collider2D[] PlayerColliders = Physics2D.OverlapAreaAll(VTopLeft, VBottomRight, m_WhatIsPlayer);
+        for (int i = 0; i < PlayerColliders.Length; i++)
         {
-            if (colliders[i].gameObject.tag == "Player")
+            if (PlayerColliders[i].gameObject.tag == "Player")
             {
-                colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
+                PlayerColliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
+            }
+        }
+
+        Collider2D[] chickenColliders = Physics2D.OverlapAreaAll(VTopLeft, VBottomRight, m_WhatIsChicken);
+        for (int i = 0; i < chickenColliders.Length; i++)
+        {
+            if (chickenColliders[i].gameObject.tag == "Chicken")
+            {
+                chickenColliders[i].gameObject.GetComponent<ChickenBehaviour>().Die();
             }
         }
     }
