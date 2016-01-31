@@ -467,6 +467,7 @@ public class Character_Controller : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+
         if(collision.gameObject.tag =="zonePlayer" && PlayerNumber == collision.gameObject.GetComponent<SacrificeDalleManager>().GetPlayerNumber())
         {
             isOnDunkRange = true;
