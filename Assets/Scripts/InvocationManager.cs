@@ -69,7 +69,6 @@ public class InvocationManager : MonoBehaviour {
         for (int i = 0; i < size; i++)
         {
             list[i] = Random.Range(0, chickenPop.chickenGoList.Count);
-            Debug.Log(" invocationList[i]" + list[i]);
         }
     }
 }

@@ -130,8 +130,6 @@ public class Character_Controller : MonoBehaviour
         if (Input.GetButtonDown("DunkP" + PlayerNumber)  && isOnDunkRange && chicken!=null)// && OnRangeFromPlayer(range, target.transform.localPosition))
         {
             
-            Debug.Log("empalle");
-
             Dunk();
         }
 
@@ -254,7 +252,7 @@ public class Character_Controller : MonoBehaviour
             {
                 m_Roll = true;
                 m_rollCDLeft = m_RollCD;
-                Debug.Log("ROLLATTACK  X= " + x + "  Y= " + y);
+
                 m_IsRolling = true;
                 timeRolling = m_rollDuration;
                 m_XDirection = x;
@@ -283,7 +281,7 @@ public class Character_Controller : MonoBehaviour
             else
             {
                 m_IsRolling = false;
-                Debug.Log("ROLLATTACK END");
+
                 m_Rigidbody2D.velocity = new Vector2(0f, 0f);
                 m_Anim.SetBool("dashing", false);
             }
@@ -390,8 +388,9 @@ public class Character_Controller : MonoBehaviour
 
     private void Dunk()
     {
-        target.gameObject.GetComponent<SacrificeDalleManager>().AddChicken(chicken.GetComponent<ChickenBehaviour>());
         chicken.transform.parent = null;
+        target.gameObject.GetComponent<SacrificeDalleManager>().AddChicken(chicken.GetComponent<ChickenBehaviour>());
+        
         m_HaveChicken = false;
         m_Anim.SetBool("carrying", false);
         m_Anim.SetTrigger("dunk");
@@ -476,9 +475,7 @@ public class Character_Controller : MonoBehaviour
         if (m_IsRolling && collision.gameObject.tag == "Player")
         {
             //check stun...
-            Debug.Log("TRIGGER Stunned!");
 
-            Debug.Log("Player " + PlayerNumber + " is stunning player " + collision.gameObject.GetComponent<Character_Controller>().PlayerNumber);
 
             collision.gameObject.GetComponent<Character_Controller>().Stunned();
 

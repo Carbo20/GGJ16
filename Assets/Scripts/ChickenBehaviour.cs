@@ -160,7 +160,7 @@ public class ChickenBehaviour : MonoBehaviour
                     }
                 }
             }
-            if (transform.parent != null)
+            if (transform.parent != null && transform.gameObject.tag == "Player")
             {
                 transform.parent.GetComponent<Character_Controller>().m_HaveChicken = false;
                 transform.parent.GetComponent<Character_Controller>().m_Anim.SetBool("carrying", false);
@@ -207,7 +207,7 @@ public class ChickenBehaviour : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
             if (m_ChickenLaunched > 0 && m_ChickenLaunched < m_FlyingChickenDuration)
             {
-                Debug.Log("WAKEUP");
+
                 Die();
                 //EndThrow();
             }

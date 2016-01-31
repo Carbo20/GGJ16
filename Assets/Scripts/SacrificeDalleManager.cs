@@ -29,6 +29,9 @@ public class SacrificeDalleManager : MonoBehaviour {
 
     private bool gameEnded = false;
 
+    [SerializeField]
+    private GameObject gameTitle, pressStart;
+
     // Use this for initialization
     void Start () {
         nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR-1);
@@ -69,7 +72,6 @@ public class SacrificeDalleManager : MonoBehaviour {
 
     void EndGame()
     {
-        Debug.Log("Player " + playerNumber + " wins!");
         GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < playerArray.Length; ++i)
         {
@@ -80,6 +82,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         GameObject[] chicksArray = GameObject.FindGameObjectsWithTag("Chicken");
         foreach (GameObject chick in chicksArray)
         {
+            
             chick.GetComponent<ChickenBehaviour>().Die();
             //GameObject corpse = Instantiate(chick.GetComponent<ChickenBehaviour>().dead_chicken);
             //corpse.transform.position = chick.GetComponent<ChickenBehaviour>().transform.position;
@@ -93,6 +96,9 @@ public class SacrificeDalleManager : MonoBehaviour {
         // creatureAnim.SetActive(true);
         Instantiate(creatureAnim);
         gameEnded = true;
+
+        gameTitle.SetActive(true);
+        pressStart.SetActive(true);
     }
 
     IEnumerator SetActiveChicken()
@@ -102,7 +108,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         nbChickenSacrificed++;
         if (nbChickenSacrificed == nbChickenNeeded)
         {
-            Debug.Log("Player " + playerNumber + " wins!");
+
             indicator_gao.SetActive(false);
             EndGame();
         }
