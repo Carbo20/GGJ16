@@ -85,7 +85,8 @@ public class SacrificeDalleManager : MonoBehaviour {
         //block player movements
 
         //play demonlord animation
-        creatureAnim.SetActive(true);
+        // creatureAnim.SetActive(true);
+        Instantiate(creatureAnim);
     }
 
     IEnumerator SetActiveChicken()
@@ -93,12 +94,12 @@ public class SacrificeDalleManager : MonoBehaviour {
         yield return new WaitForSeconds(0.8f);
         dead_chickens_gao[nbChickenSacrificed].SetActive(true);
         nbChickenSacrificed++;
-       // if (nbChickenSacrificed == nbChickenNeeded)
-       // {
+        if (nbChickenSacrificed == nbChickenNeeded)
+        {
             Debug.Log("Player " + playerNumber + " wins!");
             indicator_gao.SetActive(false);
             EndGame();
-      //  }
+        }
 
     }
 }
