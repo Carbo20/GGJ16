@@ -72,8 +72,9 @@ public class ChickenBehaviour : MonoBehaviour
         }
     }
 
-    void Flying(Vector2 vFly)
+    public void Flying(Vector2 vFly)
     {
+        state = ChickenBehaviour.chickenState.Flying;
         direction.Set(vFly.x, vFly.y);
         speed = flySpeed;
     }

@@ -57,7 +57,7 @@ public class Character_Controller : MonoBehaviour
     ////[SerializeField] private float m_RollForce;
     
     public bool m_IsRolling;
-    private float timeRolling;
+    public float timeRolling;
     
     private float m_rollCDLeft;
     public bool m_Stunned = false;
@@ -364,13 +364,19 @@ public class Character_Controller : MonoBehaviour
                 //todo mettre en inhenhouse si dans le poulailler ou returning sinon
                 if (Mathf.Abs(moveX) < 0.1f && Mathf.Abs(moveY) < 0.1f)
                 {
-                    chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                    if (transform.position.x > 3)
+                        chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                    else
+                        chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
                 }
                 else
                 {
-                    chicken.GetComponent<ChickenBehaviour>().enabled = false;
-                    chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX * 10, moveY * 10);
+                    //chicken.GetComponent<ChickenBehaviour>().enabled = false;
+                    //chicken.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX * 10, moveY * 10);
+                    
+                    chicken.GetComponent<ChickenBehaviour>().Flying(new Vector2(moveX * 10, moveY * 10));
                     chicken.GetComponent<ChickenExplosion>().enabled = true;
+                    chicken.GetComponent<ChickenExplosion>().m_PlayerThrowing = PlayerNumber;
                     //rajouter un cd de mort pour le chicken
                 }
                 chicken = null;
@@ -382,7 +388,10 @@ public class Character_Controller : MonoBehaviour
                 m_Anim.SetBool("carrying", false);
                 arm.SetActive(false);
 
-                chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                if (transform.position.x > 3)
+                    chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                else
+                    chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
 
                 chicken = null;
             }
@@ -423,7 +432,10 @@ public class Character_Controller : MonoBehaviour
                 collision.gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("carrying", false);
                 collision.gameObject.GetComponent<Character_Controller>().arm.SetActive(false);
 
-                collision.gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                if (transform.position.x > 3)
+                    collision.gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
+                else
+                    collision.gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
 
                 collision.gameObject.GetComponent<Character_Controller>().chicken = null;
             }
