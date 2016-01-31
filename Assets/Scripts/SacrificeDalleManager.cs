@@ -23,6 +23,9 @@ public class SacrificeDalleManager : MonoBehaviour {
     [SerializeField]
     GameObject indicator_gao;
 
+    [SerializeField]
+    GameObject creatureAnim;
+
     // Use this for initialization
     void Start () {
         nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR-1);
@@ -80,7 +83,9 @@ public class SacrificeDalleManager : MonoBehaviour {
         //todo: 
         //display winner
         //block player movements
+
         //play demonlord animation
+        creatureAnim.SetActive(true);
     }
 
     IEnumerator SetActiveChicken()
@@ -88,12 +93,12 @@ public class SacrificeDalleManager : MonoBehaviour {
         yield return new WaitForSeconds(0.8f);
         dead_chickens_gao[nbChickenSacrificed].SetActive(true);
         nbChickenSacrificed++;
-        if (nbChickenSacrificed == nbChickenNeeded)
-        {
+       // if (nbChickenSacrificed == nbChickenNeeded)
+       // {
             Debug.Log("Player " + playerNumber + " wins!");
             indicator_gao.SetActive(false);
             EndGame();
-        }
+      //  }
 
     }
 }
