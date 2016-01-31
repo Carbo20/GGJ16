@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BigChickenManager : MonoBehaviour {
-    private float speed = 5;
+    private float speed = 7;
 	// Use this for initialization
 	void Start () {
 	
