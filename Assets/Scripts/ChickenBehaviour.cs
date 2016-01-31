@@ -17,6 +17,14 @@ public class ChickenBehaviour : MonoBehaviour
     [SerializeField]
     public ChickenColors color;
 
+    #region Ajouts LD
+    private float m_FlyingChickenDuration = 1f;
+    private float m_ChickenLaunched = 0f;
+    public int m_PlayerThrowing;
+    const float k_CollisionRadius = 0.6f;
+    [SerializeField] private LayerMask m_WhatIsPlayer;
+    #endregion
+
     // Use this for initialization
     void Start()
     {
@@ -36,11 +44,16 @@ public class ChickenBehaviour : MonoBehaviour
         {
             transform.localPosition = new Vector2(-0.01f, -0.02f);
         }
-        /*else if (state == chickenState.Flying)
+        else if (state == chickenState.Flying)
         {
-            Debug.Log(string.Format("i fly at {0} for {1}", speed, flytime));
-            flytime -= Time.deltaTime;
-        }*/
+            //Debug.Log(string.Format("i fly at {0} for {1}", speed, flytime));
+            //flytime -= Time.deltaTime;
+            CheckCollision();
+
+            m_ChickenLaunched += Time.deltaTime;
+            if (m_ChickenLaunched >= m_FlyingChickenDuration)
+                EndThrow();
+        }
         else
         {
             //time = 0.0f;
@@ -76,10 +89,37 @@ public class ChickenBehaviour : MonoBehaviour
         }
     }
 
+    private void EndThrow()
+    {
+        //lancer l'animation d'explosion
+        //poser le cadavre
+        m_ChickenLaunched = 0;
+        if (transform.position.x > 3)
+            state = chickenState.Returning;
+        else
+            state = chickenState.inHenhouse;
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
+    }
+
+    private void CheckCollision()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, k_CollisionRadius, m_WhatIsPlayer);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject.tag == "Player" && m_PlayerThrowing != colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber)
+            {
+                colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
+
+                Destroy(this.gameObject);
+            }
+        }
+    }
 
     public void Flying(Vector2 vFly)
     {
         state = ChickenBehaviour.chickenState.Flying;
+        m_ChickenLaunched = 0;
+
         //GetComponent<Rigidbody2D>().velocity = new Vector2(vFly.x * 10, vFly.y * 10);
         //speed = flySpeed;
         //flytime = 10.0f;
@@ -106,6 +146,12 @@ public class ChickenBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall"))
         {
             //Debug.Log("hitsomething: ");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
+            if (m_ChickenLaunched > 0 && m_ChickenLaunched < m_FlyingChickenDuration)
+            {
+                EndThrow();
+            }
+
             direction.x *= -1;
             direction.y *= -1;
             direction.Normalize();

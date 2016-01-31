@@ -3,43 +3,24 @@ using System.Collections;
 
 public class ChickenExplosion : MonoBehaviour {
 
-    public int m_PlayerThrowing;
-    private float m_FlyingChickenDuration;
-    private float m_ChickenLaunched;
-    const float k_CollisionRadius = 0.6f;
-    [SerializeField] private LayerMask m_WhatIsPlayer;
+    
+    
     [SerializeField] private float m_StunDuration = 0.5f;
 
     // Use this for initialization
     void Start()
     {
-        m_FlyingChickenDuration = 1f;
-        m_ChickenLaunched = 0;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckCollision();
 
-        m_ChickenLaunched += Time.deltaTime;
-        if (m_ChickenLaunched >= m_FlyingChickenDuration)
-            EndExplosion();
+
     }
 
-    private void EndExplosion()
-    {
-        //lancer l'animation d'explosion
-        //poser le cadavre
-        //GetComponent<ChickenBehaviour>().enabled = true;
-        if(transform.position.x > 3)
-            GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
-        else
-            GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
-        GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
-        enabled = false;
-        //Destroy(this.gameObject);
-    }
+    
 
     private void CheckCollision()
     {
@@ -48,31 +29,7 @@ public class ChickenExplosion : MonoBehaviour {
         {
             if (colliders[i].gameObject.tag == "Player" && m_PlayerThrowing != colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber)
             {
-                colliders[i].gameObject.GetComponent<Character_Controller>().m_Stunned = true;
-                colliders[i].gameObject.GetComponent<Character_Controller>().m_StunLeft = m_StunDuration;
-                colliders[i].gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
-
-                if (colliders[i].gameObject.GetComponent<Character_Controller>().m_HaveChicken)
-                {
-                    colliders[i].gameObject.GetComponent<Character_Controller>().chicken.transform.parent = null;
-                    colliders[i].gameObject.GetComponent<Character_Controller>().m_HaveChicken = false;
-                    colliders[i].gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("carrying", false);
-                    colliders[i].gameObject.GetComponent<Character_Controller>().arm.SetActive(false);
-
-                    if (transform.position.x > 3)
-                        colliders[i].gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.Returning;
-                    else
-                        colliders[i].gameObject.GetComponent<Character_Controller>().chicken.GetComponent<ChickenBehaviour>().state = ChickenBehaviour.chickenState.inHenhouse;
-
-                    colliders[i].gameObject.GetComponent<Character_Controller>().chicken = null;
-                }
-                else if (colliders[i].gameObject.GetComponent<Character_Controller>().m_IsRolling)
-                {
-                    colliders[i].gameObject.GetComponent<Character_Controller>().timeRolling = 0;
-                    colliders[i].gameObject.GetComponent<Character_Controller>().m_IsRolling = false;
-                    colliders[i].gameObject.GetComponent<Character_Controller>().m_Rigidbody2D.velocity = new Vector2(0f, 0f);
-                    colliders[i].gameObject.GetComponent<Character_Controller>().m_Anim.SetBool("dashing", false);
-                }
+                colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
 
                 Destroy(this.gameObject);
             }
