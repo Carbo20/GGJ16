@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum ChickenColors { WHITE, BLUE, RED, YELLOW, GREEN, EXPLO, NB_CHICKEN_COLOR };
 
@@ -26,6 +27,8 @@ public class SacrificeDalleManager : MonoBehaviour {
     [SerializeField]
     GameObject creatureAnim;
 
+    private bool gameEnded = false;
+
     // Use this for initialization
     void Start () {
         nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR-1);
@@ -35,6 +38,8 @@ public class SacrificeDalleManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(gameEnded && Input.anyKeyDown)
+            SceneManager.LoadScene("GameScene");
     }
 
     public int GetPlayerNumber()
@@ -87,6 +92,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         //play demonlord animation
         // creatureAnim.SetActive(true);
         Instantiate(creatureAnim);
+        gameEnded = true;
     }
 
     IEnumerator SetActiveChicken()
