@@ -76,6 +76,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         GameObject[] chicksArray = GameObject.FindGameObjectsWithTag("Chicken");
         foreach (GameObject chick in chicksArray)
         {
+            Debug.Log("CREVE");
             GameObject corpse = Instantiate(chick.GetComponent<ChickenBehaviour>().dead_chicken);
             corpse.transform.position = chick.GetComponent<ChickenBehaviour>().transform.position;
             Destroy(chick);

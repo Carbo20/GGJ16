@@ -61,6 +61,7 @@ public class Character_Controller : MonoBehaviour
     
     private float m_rollCDLeft;
     public bool m_Stunned = false;
+    public bool m_Dead = false;
     public float m_StunDuration = 0.5f;
     public float m_StunLeft = 0f;
     #endregion
@@ -117,16 +118,12 @@ public class Character_Controller : MonoBehaviour
             Dunk();
         }
 
-        if (!m_Stunned)
+        if (!m_Stunned && !m_Dead)
         {
             // Read the inputs.    
             float h = Mathf.Abs(Input.GetAxis("HorizontalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("HorizontalP" + PlayerNumber);
             float v = Mathf.Abs(Input.GetAxis("VerticalP" + PlayerNumber)) < 0.2 ? 0 : Input.GetAxis("VerticalP" + PlayerNumber);
         
-       
-    
-
-
             if (!m_HaveChicken)
                 CheckRoll(h, v);
 
@@ -139,7 +136,7 @@ public class Character_Controller : MonoBehaviour
             else
                 ThrowChicken(h, v);
         }
-        else
+        else if (!m_Dead)
             CheckStunned();
     }
 
@@ -518,7 +515,7 @@ public class Character_Controller : MonoBehaviour
     #region DEAD
     public void Dies()
     {
-        m_Stunned = true;
+        m_Dead = true;
         m_Anim.SetBool("stunned", true);
     }
     #endregion
