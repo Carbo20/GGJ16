@@ -38,9 +38,9 @@ public class PiegeBehaviour : MonoBehaviour {
             collision.gameObject.GetComponent<Character_Controller>().Stunned();
         }
 
-        if (collision.gameObject.tag == "Chicken" && state == (sprites.Count - 1))
+        /*if (collision.gameObject.tag == "Chicken" && state == (sprites.Count - 1))
         {
             collision.gameObject.GetComponent<ChickenBehaviour>().Die();
-        }
+        }*/
     }
 }
