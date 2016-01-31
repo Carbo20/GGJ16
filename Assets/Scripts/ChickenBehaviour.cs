@@ -30,7 +30,7 @@ public class ChickenBehaviour : MonoBehaviour
     [SerializeField] GameObject explosion;
 
     [SerializeField] private bool m_Explosive = false;
-    const float k_ExplosionRadius = 1.2f;
+    const float k_ExplosionRadius = 1f;
 
     bool dead = false;
 
