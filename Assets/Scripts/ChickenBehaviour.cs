@@ -18,7 +18,7 @@ public class ChickenBehaviour : MonoBehaviour
     public ChickenColors color;
 
     #region Ajouts LD
-    private float m_FlyingChickenDuration = 1f;
+    private float m_FlyingChickenDuration = 0.5f;
     private float m_ChickenLaunched = 0f;
     public int m_PlayerThrowing;
     const float k_CollisionRadius = 0.6f;
