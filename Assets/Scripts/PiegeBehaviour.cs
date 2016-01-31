@@ -11,6 +11,11 @@ public class PiegeBehaviour : MonoBehaviour {
     private float elapsedTime = 0;
     private int state = 0;
 
+    [SerializeField] private LayerMask m_WhatIsPlayer;
+    [SerializeField] private LayerMask m_WhatIsChicken;
+    [SerializeField] private GameObject m_TopLeft;
+    [SerializeField] private GameObject m_BottomRight;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -29,18 +34,36 @@ public class PiegeBehaviour : MonoBehaviour {
             elapsedTime = 0;
 
         }
+        if (state == (sprites.Count - 1))
+            CheckCollision();
 
 	}
-    public void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player" && state == (sprites.Count -1))
-        {
-            collision.gameObject.GetComponent<Character_Controller>().Stunned();
-        }
 
-        /*if (collision.gameObject.tag == "Chicken" && state == (sprites.Count - 1))
+    private void CheckCollision()
+    {
+        Vector2 VTopLeft = new Vector2(m_TopLeft.transform.position.x, m_TopLeft.transform.position.y);
+        Vector2 VBottomRight = new Vector2(m_BottomRight.transform.position.x, m_BottomRight.transform.position.y);
+
+        Collider2D[] colliders = Physics2D.OverlapAreaAll(VTopLeft, VBottomRight, m_WhatIsPlayer);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            collision.gameObject.GetComponent<ChickenBehaviour>().Die();
-        }*/
+            if (colliders[i].gameObject.tag == "Player")
+            {
+                colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
+            }
+        }
     }
+
+    //public void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if (collision.gameObject.tag == "Player" && state == (sprites.Count -1))
+    //    {
+    //        collision.gameObject.GetComponent<Character_Controller>().Stunned();
+    //    }
+
+    //    /*if (collision.gameObject.tag == "Chicken" && state == (sprites.Count - 1))
+    //    {
+    //        collision.gameObject.GetComponent<ChickenBehaviour>().Die();
+    //    }*/
+    //}
 }
