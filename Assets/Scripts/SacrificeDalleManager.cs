@@ -52,13 +52,8 @@ public class SacrificeDalleManager : MonoBehaviour {
             nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
             indicator_gao.GetComponent<SpriteRenderer>().color = color_indicator[(int)nextColorNeeded];
             dead_chickens_gao[nbChickenSacrificed].GetComponent<SpriteRenderer>().sprite = dead_chickens_sprites[(int)chicken.GetColor()];
-            dead_chickens_gao[nbChickenSacrificed].SetActive(true);
-            nbChickenSacrificed++;
-            if (nbChickenSacrificed == nbChickenNeeded)
-            {
-                indicator_gao.SetActive(false);
-                EndGame();
-            }
+            StartCoroutine("SetActiveChicken");
+
         }
         Destroy(chicken.gameObject);
         GameManager.nbChickens--;
@@ -84,5 +79,19 @@ public class SacrificeDalleManager : MonoBehaviour {
         //display winner
         //block player movements
         //play demonlord animation
+    }
+
+    IEnumerator SetActiveChicken()
+    {
+        yield return new WaitForSeconds(0.8f);
+        dead_chickens_gao[nbChickenSacrificed].SetActive(true);
+        nbChickenSacrificed++;
+        if (nbChickenSacrificed == nbChickenNeeded)
+        {
+            Debug.Log("Player " + playerNumber + " wins!");
+            indicator_gao.SetActive(false);
+            EndGame();
+        }
+
     }
 }

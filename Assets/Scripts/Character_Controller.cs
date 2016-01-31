@@ -84,6 +84,8 @@ public class Character_Controller : MonoBehaviour
     public Rigidbody2D m_Rigidbody2D;                  
     private bool m_FacingRight = true;                  // For determining which way the player is currently facing.
     private bool isOnDunkRange = false;
+    private bool isDunking = false;
+    private float timeOfDunk=1f, timeDunking=0;
     #endregion
 
     #region Monobehaviour
@@ -109,6 +111,21 @@ public class Character_Controller : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (isDunking)
+        {
+            if (timeDunking < timeOfDunk)
+            {
+                timeDunking += Time.deltaTime;
+                
+            }
+            else
+            {
+                isDunking = false;
+            }
+            return;
+        }
+
         if (Input.GetButtonDown("DunkP" + PlayerNumber)  && isOnDunkRange && chicken!=null)// && OnRangeFromPlayer(range, target.transform.localPosition))
         {
             
@@ -175,6 +192,8 @@ public class Character_Controller : MonoBehaviour
     #region MOVING THE CHARACTER 
     public void Move(float moveX, float moveY, bool roll)
     {
+        if (isDunking) return;
+
         if (!m_IsRolling) 
         {
             float t_moveSpeedX, t_moveSpeedY;
@@ -378,7 +397,12 @@ public class Character_Controller : MonoBehaviour
         chicken.transform.parent = null;
         m_HaveChicken = false;
         m_Anim.SetBool("carrying", false);
+        m_Anim.SetTrigger("dunk");
         arm.SetActive(false);
+        isDunking = true;
+        timeDunking = 0;
+        m_Rigidbody2D.velocity = Vector2.zero;
+        transform.position = new Vector2(target.transform.position.x - target.transform.localScale.x/2, target.transform.position.y);
     }
 
     private void ThrowChicken(float moveX, float moveY)
