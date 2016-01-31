@@ -126,7 +126,7 @@ public class ChickenBehaviour : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         if (!dead)
         {
