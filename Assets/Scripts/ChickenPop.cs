@@ -10,6 +10,8 @@ public class ChickenPop : MonoBehaviour {
     [SerializeField]
     public static bool run;
     private float countdown;
+    private int number = 0;
+    [SerializeField] private int numTurnToSpawnExplo = 5;
 
     [SerializeField]
     private Transform parent;
@@ -36,7 +38,16 @@ public class ChickenPop : MonoBehaviour {
             countdown -= Time.deltaTime;
             if (countdown <= 0.0f)
             {
-                chickenGo = Instantiate(chickenGoList[Random.Range(0, chickenGoList.Count)]);//as GameObject;
+                number++;
+                if (number == numTurnToSpawnExplo)
+                {
+                    number = 0;
+                    chickenGo = Instantiate(chickenGoList[5]);// ExploChicken;
+                    chickenGo.transform.parent = parent;
+                    chickenGo.transform.position = transform.position;
+                    countdown = Random.Range(1.0f, 5.0f);
+                }
+                chickenGo = Instantiate(chickenGoList[Random.Range(0, chickenGoList.Count-1)]);//as GameObject;
                 chickenGo.transform.parent = parent;
                 chickenGo.transform.position = transform.position;
                 GameManager.nbChickens++;
