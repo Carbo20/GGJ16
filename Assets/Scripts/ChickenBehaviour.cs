@@ -160,6 +160,14 @@ public class ChickenBehaviour : MonoBehaviour
                     }
                 }
             }
+            if (transform.parent != null)
+            {
+                transform.parent.GetComponent<Character_Controller>().m_HaveChicken = false;
+                transform.parent.GetComponent<Character_Controller>().m_Anim.SetBool("carrying", false);
+                transform.parent.GetComponent<Character_Controller>().arm.SetActive(false);
+                transform.parent.GetComponent<Character_Controller>().chicken = null;
+            }
+
 
             Destroy(this.gameObject);
         }
