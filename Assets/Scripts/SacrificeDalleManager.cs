@@ -18,10 +18,15 @@ public class SacrificeDalleManager : MonoBehaviour {
     List<Sprite> dead_chickens_sprites;
     [SerializeField]
     List<GameObject> dead_chickens_gao;
+    [SerializeField]
+    List<Color> color_indicator;
+    [SerializeField]
+    GameObject indicator_gao;
 
     // Use this for initialization
     void Start () {
         nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
+        indicator_gao.GetComponent<SpriteRenderer>().color = color_indicator[(int)nextColorNeeded];
         nbChickenSacrificed = 0;
     }
 	
@@ -45,12 +50,14 @@ public class SacrificeDalleManager : MonoBehaviour {
         {
             
             nextColorNeeded = (ChickenColors)Random.Range(0, (int)ChickenColors.NB_CHICKEN_COLOR);
+            indicator_gao.GetComponent<SpriteRenderer>().color = color_indicator[(int)nextColorNeeded];
             dead_chickens_gao[nbChickenSacrificed].GetComponent<SpriteRenderer>().sprite = dead_chickens_sprites[(int)chicken.GetColor()];
             dead_chickens_gao[nbChickenSacrificed].SetActive(true);
             nbChickenSacrificed++;
             if (nbChickenSacrificed == nbChickenNeeded)
             {
                 Debug.Log("Player " + playerNumber + " wins!");
+                indicator_gao.SetActive(false);
             }
         }
         Destroy(chicken.gameObject);
