@@ -8,9 +8,7 @@ public class ChickenPop : MonoBehaviour {
     [SerializeField]
     public List<GameObject>  chickenGoList;
     [SerializeField]
-    //private float popTime;
-    //private int chickenPickedRandomly;
-    //private bool isAlreadyCancelled;
+    public static bool run;
     private float countdown;
 
     [SerializeField]
@@ -18,6 +16,7 @@ public class ChickenPop : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        run = true;
         //isAlreadyCancelled = false;
         //nbChickenTypes = 3;//Placeholder
         //ChickenList: (0:Red, 1:Teal,2:Purple...)
@@ -32,7 +31,7 @@ public class ChickenPop : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        if(GameManager.nbChickens < GameManager.maxChickens)
+        if(run && GameManager.nbChickens < GameManager.maxChickens)
         {
             countdown -= Time.deltaTime;
             if (countdown <= 0.0f)

@@ -541,6 +541,7 @@ public class Character_Controller : MonoBehaviour
     {
         m_Dead = true;
         m_Anim.SetBool("stunned", true);
+        GetComponent<Rigidbody2D>().gravityScale = 1;
     }
     #endregion
 }

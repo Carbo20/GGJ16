@@ -63,15 +63,15 @@ public class SacrificeDalleManager : MonoBehaviour {
     {
         Debug.Log("Player " + playerNumber + " wins!");
         GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i <= playerArray.Length; ++i)
+        for (int i = 0; i < playerArray.Length; ++i)
         {
             if (playerArray[i].GetComponent<Character_Controller>().PlayerNumber != playerNumber)
                 playerArray[i].GetComponent<Character_Controller>().Dies();
         }
+        ChickenPop.run = false;
         GameObject[] chicksArray = GameObject.FindGameObjectsWithTag("Chicken");
         foreach (GameObject chick in chicksArray)
         {
-            Debug.Log("CREVE");
             GameObject corpse = Instantiate(chick.GetComponent<ChickenBehaviour>().dead_chicken);
             corpse.transform.position = chick.GetComponent<ChickenBehaviour>().transform.position;
             Destroy(chick);
