@@ -111,11 +111,11 @@ public class ChickenBehaviour : MonoBehaviour
             if (colliders[i].gameObject.tag == "Player" && m_PlayerThrowing != colliders[i].gameObject.GetComponent<Character_Controller>().PlayerNumber)
             {
                 colliders[i].gameObject.GetComponent<Character_Controller>().Stunned();
-
                 GameManager.nbChickens--;
                 GameObject corpse = Instantiate(dead_chicken);
                 corpse.transform.position = transform.position;
                 Destroy(this.gameObject);
+                break;
             }
         }
     }

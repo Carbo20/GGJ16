@@ -8,40 +8,42 @@ public class ChickenPop : MonoBehaviour {
     [SerializeField]
     public List<GameObject>  chickenGoList;
     [SerializeField]
-    private float popTime;
-    private int chickenPickedRandomly;
-    private bool isAlreadyCancelled;
+    //private float popTime;
+    //private int chickenPickedRandomly;
+    //private bool isAlreadyCancelled;
+    private float countdown;
 
     [SerializeField]
     private Transform parent;
 
     // Use this for initialization
     void Start () {
-        isAlreadyCancelled = false;
+        //isAlreadyCancelled = false;
         //nbChickenTypes = 3;//Placeholder
         //ChickenList: (0:Red, 1:Teal,2:Purple...)
-        chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
+        //chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
         //Debug.Log("chickenPickedRandomly: "+ chickenPickedRandomly);
-        if (chickenGo == null)
-        {
-            InvokeRepeating("SpawnChicken", popTime, popTime);
-        }
-        
+        //if (chickenGo == null)
+        //{
+        //    InvokeRepeating("SpawnChicken", popTime + Random.Range(0.1f, 1.0f), popTime);
+        //}
     }
 
-    void SpawnChicken()
-    {
-        chickenGo = Instantiate(chickenGoList[chickenPickedRandomly]);//as GameObject;
-        chickenGo.transform.parent = parent;
-        chickenGo.transform.position = transform.position;
-        if (GameManager.nbChickens >= GameManager.maxChickens)
-            CancelInvoke("SpawnChicken");
-        GameManager.nbChickens++;
-        
-        chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
-    }
     // Update is called once per frame
-    void Update () {
-
-	}
+    void Update ()
+    {
+        if(GameManager.nbChickens < GameManager.maxChickens)
+        {
+            countdown -= Time.deltaTime;
+            if (countdown <= 0.0f)
+            {
+                chickenGo = Instantiate(chickenGoList[Random.Range(0, chickenGoList.Count)]);//as GameObject;
+                chickenGo.transform.parent = parent;
+                chickenGo.transform.position = transform.position;
+                GameManager.nbChickens++;
+                countdown = Random.Range(1.0f, 5.0f);
+            }
+            //chickenPickedRandomly = Random.Range(0, chickenGoList.Count);
+        }
+    }
 }
