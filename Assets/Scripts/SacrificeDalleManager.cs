@@ -56,11 +56,33 @@ public class SacrificeDalleManager : MonoBehaviour {
             nbChickenSacrificed++;
             if (nbChickenSacrificed == nbChickenNeeded)
             {
-                Debug.Log("Player " + playerNumber + " wins!");
                 indicator_gao.SetActive(false);
+                EndGame();
             }
         }
         Destroy(chicken.gameObject);
         GameManager.nbChickens--;
+    }
+
+    void EndGame()
+    {
+        Debug.Log("Player " + playerNumber + " wins!");
+        GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i <= playerArray.Length; ++i)
+        {
+            if (playerArray[i].GetComponent<Character_Controller>().PlayerNumber != playerNumber)
+                playerArray[i].GetComponent<Character_Controller>().Dies();
+        }
+        GameObject[] chicksArray = GameObject.FindGameObjectsWithTag("Chicken");
+        foreach (GameObject chick in chicksArray)
+        {
+            GameObject corpse = Instantiate(chick.GetComponent<ChickenBehaviour>().dead_chicken);
+            corpse.transform.position = chick.GetComponent<ChickenBehaviour>().transform.position;
+            Destroy(chick);
+        }
+        //todo: 
+        //display winner
+        //block player movements
+        //play demonlord animation
     }
 }

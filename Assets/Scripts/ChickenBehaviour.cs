@@ -24,7 +24,7 @@ public class ChickenBehaviour : MonoBehaviour
     const float k_CollisionRadius = 0.6f;
     [SerializeField] private LayerMask m_WhatIsPlayer;
 
-    [SerializeField] GameObject dead_chicken;
+    [SerializeField] public GameObject dead_chicken;
     #endregion
 
     // Use this for initialization

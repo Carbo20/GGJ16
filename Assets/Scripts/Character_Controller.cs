@@ -514,6 +514,12 @@ public class Character_Controller : MonoBehaviour
             playerPos = value;
         }
     }
-     
 
+    #region DEAD
+    public void Dies()
+    {
+        m_Stunned = true;
+        m_Anim.SetBool("stunned", true);
+    }
+    #endregion
 }
