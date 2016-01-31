@@ -10,7 +10,8 @@ public class ChickenBehaviour : MonoBehaviour
     public chickenState state;
     public enum chickenState { inHenhouse, Captured, Returning, Flying };
     [SerializeField]
-    private float flySpeed = 4.2f;
+    //private float flytime = 0.0f;
+    private float flySpeed = 8.2f;
     private float roamingSpeed = 0.7f;
     private float runningSpeed = 2.1f;
     [SerializeField]
@@ -35,8 +36,14 @@ public class ChickenBehaviour : MonoBehaviour
         {
             transform.localPosition = new Vector2(-0.01f, -0.02f);
         }
-        else if (state == chickenState.Flying)
+        /*else if (state == chickenState.Flying)
         {
+            Debug.Log(string.Format("i fly at {0} for {1}", speed, flytime));
+            flytime -= Time.deltaTime;
+        }*/
+        else
+        {
+            //time = 0.0f;
             if (transform.position.x > 3)
             {
                 state = chickenState.Returning;
@@ -57,9 +64,6 @@ public class ChickenBehaviour : MonoBehaviour
                     countdown = 0.7f;
                 }
             }
-        }
-        else
-        {
             transform.Translate(direction * Time.deltaTime * speed);
             if (direction.x < 0.0f)
             {
@@ -72,14 +76,16 @@ public class ChickenBehaviour : MonoBehaviour
         }
     }
 
+
     public void Flying(Vector2 vFly)
     {
         state = ChickenBehaviour.chickenState.Flying;
-        direction.Set(vFly.x, vFly.y);
-        speed = flySpeed;
+        //GetComponent<Rigidbody2D>().velocity = new Vector2(vFly.x * 10, vFly.y * 10);
+        //speed = flySpeed;
+        //flytime = 10.0f;
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    /*void OnTriggerExit2D(Collider2D other)
     {
         //Debug.Log("triggerd");
         if (state != chickenState.Captured && other.gameObject.name == "Henhouse")
@@ -87,17 +93,17 @@ public class ChickenBehaviour : MonoBehaviour
             //Debug.Log("exited");
             state = chickenState.Returning;
         }
-    }
+    }*/
 
-    void OnTriggerEnter2D(Collider2D other)
+    /*void OnTriggerEnter2D(Collider2D other)
     {
         if (state == chickenState.Returning && other.gameObject.name == "Henhouse")
             state = chickenState.inHenhouse;
-    }
+    }*/
 
-    void OnCollisionEnter2D(Collision2D other)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall"))
         {
             //Debug.Log("hitsomething: ");
             direction.x *= -1;
