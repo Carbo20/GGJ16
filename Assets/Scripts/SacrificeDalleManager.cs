@@ -75,7 +75,7 @@ public class SacrificeDalleManager : MonoBehaviour {
         GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < playerArray.Length; ++i)
         {
-            if (playerArray[i].GetComponent<Character_Controller>().PlayerNumber != playerNumber)
+            if (playerArray[i].GetComponent<Character_Controller>() != null && playerArray[i].GetComponent<Character_Controller>().PlayerNumber != playerNumber)
                 playerArray[i].GetComponent<Character_Controller>().Dies();
         }
         ChickenPop.run = false;

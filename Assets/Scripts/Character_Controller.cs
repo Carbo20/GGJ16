@@ -127,7 +127,7 @@ public class Character_Controller : MonoBehaviour
             return;
         }
 
-        if (Input.GetButtonDown("DunkP" + PlayerNumber)  && isOnDunkRange && chicken!=null)// && OnRangeFromPlayer(range, target.transform.localPosition))
+        if ((Input.GetButtonDown("DunkP" + PlayerNumber) || Input.GetButtonDown("ManageChickenP" + PlayerNumber) || Input.GetButtonDown("PutChickenDownP" + PlayerNumber)) && isOnDunkRange && chicken != null)// && OnRangeFromPlayer(range, target.transform.localPosition))
         {
             
             Dunk();
